@@ -7,35 +7,52 @@ using System.Threading.Tasks;
 
 namespace Satbayev.DAL
 {
-    internal class ReposityClient
+    public class ReposityClient
     {
         private string Path;
-        public ReposityClient(string Path) 
+        public ReposityClient(string Path)
         {
             this.Path = Path;
         }
         public bool CreateClient(Client client)
         {
-            using (var db = new LiteDatabase(Path))
+            try
             {
-                var clients = db.GetCollection<Client>("Client");
-                clients.Insert(client);
+                using (var db = new LiteDatabase(Path))
+                {
+                    var clients = db.GetCollection<Client>("Client");
+                    clients.Insert(client);
+                }
+            }
+            catch (Exception)
+            {
+
             }
             return true;
         }
         public Client GetClient(string email, string password)
         {
-            using (var db = new LiteDatabase(Path))
+            try
             {
-                return db.GetCollection<Client>("Client").FindAll().First(f => f.Email == email & f.Password == password);
+                using (var db = new LiteDatabase(Path))
+                {
+                    return db.GetCollection<Client>("Client").FindAll().First(f => f.Email == email & f.Password == password);
+                }
             }
+            catch (Exception) { }
+            return null;
         }
         public Client GetClient(int id)
         {
-            using (var db = new LiteDatabase(Path))
+            try
             {
-                return db.GetCollection<Client>("Client").FindAll().First(f => f.Id == id);
+                using (var db = new LiteDatabase(Path))
+                {
+                    return db.GetCollection<Client>("Client").FindAll().First(f => f.Id == id);
+                }
             }
+            catch (Exception) { }
+            return null;
         }
     }
 }
